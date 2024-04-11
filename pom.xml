@@ -7,15 +7,13 @@
     <groupId>org.example</groupId>
     <artifactId>graphics</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <lwjgl.version>3.3.3</lwjgl.version>
-        <joml.version>1.10.5</joml.version>
-        <lwjgl.natives>natives-windows</lwjgl.natives>
+        <lwjgl.natives>natives-linux</lwjgl.natives>
     </properties>
 
     <dependencyManagement>
@@ -29,6 +27,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.lwjgl</groupId>
@@ -149,10 +148,6 @@
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-opus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-ovr</artifactId>
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
@@ -336,11 +331,6 @@
         </dependency>
         <dependency>
             <groupId>org.lwjgl</groupId>
-            <artifactId>lwjgl-ovr</artifactId>
-            <classifier>${lwjgl.natives}</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-par</artifactId>
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
@@ -409,11 +399,5 @@
             <artifactId>lwjgl-zstd</artifactId>
             <classifier>${lwjgl.natives}</classifier>
         </dependency>
-        <dependency>
-            <groupId>org.joml</groupId>
-            <artifactId>joml</artifactId>
-            <version>${joml.version}</version>
-        </dependency>
     </dependencies>
-
 </project>
