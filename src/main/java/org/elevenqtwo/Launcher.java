@@ -5,13 +5,13 @@ import org.elevenqtwo.util.Consts;
 public class Launcher {
 
     public static WindowManager windowManager;
-    private static EngineManager engineManager;
+    private static TestGame game;
 
     public static void main(String[] args) {
 
         windowManager = new WindowManager(Consts.TITLE, 1600, 800, false);
-        engineManager = new EngineManager();
-
+        game = new TestGame();
+        EngineManager engineManager = new EngineManager();
         try {
             engineManager.startEngine();
         } catch (Exception e) {
@@ -20,5 +20,9 @@ public class Launcher {
     }
     public static WindowManager getWindowManager() {
         return windowManager;
+    }
+
+    public static TestGame getGameLogic() {
+        return game;
     }
 }

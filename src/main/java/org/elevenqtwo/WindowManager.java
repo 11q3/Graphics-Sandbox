@@ -94,7 +94,7 @@ public class WindowManager {
         GL11.glCullFace(GL11.GL_BACK);
     }
 
-    public void update() {
+    public void updateWindow() {
         GLFW.glfwSwapBuffers(window);
         GLFW.glfwPollEvents();
     }
@@ -140,12 +140,16 @@ public class WindowManager {
         return projectionMatrix;
     }
 
-    private boolean isVSync() {
+    public boolean isVSync() {
         return vSync;
     }
 
     public void setResize(boolean resize) {
         this.resize = resize;
+    }
+
+    public boolean isResize() {
+        return this.resize;
     }
 
     public Matrix4f updateProjectionMatrix() {
