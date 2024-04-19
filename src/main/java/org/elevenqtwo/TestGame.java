@@ -1,6 +1,7 @@
 package org.elevenqtwo;
 
 import org.elevenqtwo.model.Model;
+import org.elevenqtwo.model.Texture;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -29,17 +30,23 @@ public class TestGame implements Logic{
                 -0.5f, 0.5f, 0f,
                 -0.5f, -0.5f, 0f,
                 0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                0.5f, 0.5f, 0f,
-                -0.5f, 0.5f, 0f
+                0.5f, 0.5f, 0f
         };
 
         int[] indices = {
-            0,1,3,
-            3,1,2
+                0, 1, 2,
+                2, 3, 0
         };
 
-        model = objectLoader.loadModel(vertices, indices);
+        float[] textureCoords = {
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0
+        };
+
+        model = objectLoader.loadModel(vertices, textureCoords, indices);
+        model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/texture2.png")));
     }
 
     @Override
@@ -53,7 +60,7 @@ public class TestGame implements Logic{
 
     @Override
     public void update() {
-        color += direction * 0.01f;
+        color += direction * 0.05f;
         if(color > 1 ) {
             color = 1.0f;
         } else if (color <= 0) {

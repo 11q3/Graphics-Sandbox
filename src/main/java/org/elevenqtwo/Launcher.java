@@ -9,7 +9,7 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        windowManager = new WindowManager(Constants.TITLE, 1600, 800, false);
+        windowManager = new WindowManager(Constants.TITLE, 800, 800, true);
         game = new TestGame();
         EngineManager engineManager = new EngineManager();
         try {
