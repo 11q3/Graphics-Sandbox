@@ -1,24 +1,45 @@
 package org.elevenqtwo;
 
+import org.elevenqtwo.model.Model;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-public class TestGame implements  Logic{
+public class TestGame implements Logic{
 
     private int direction = 0;
     private float color = 0.0f;
 
     private final RenderManager renderManager;
+    private final ObjectLoader objectLoader;
     private final WindowManager windowManager;
+
+    private Model model;
 
     public TestGame() {
         renderManager = new RenderManager();
         windowManager = Launcher.getWindowManager();
+        objectLoader = new ObjectLoader();
     }
 
     @Override
     public void init() throws Exception {
+        renderManager.init();
 
+        float[] vertices = {
+                -0.5f, 0.5f, 0f,
+                -0.5f, -0.5f, 0f,
+                0.5f, -0.5f, 0f,
+                0.5f, -0.5f, 0f,
+                0.5f, 0.5f, 0f,
+                -0.5f, 0.5f, 0f
+        };
+
+        int[] indices = {
+            0,1,3,
+            3,1,2
+        };
+
+        model = objectLoader.loadModel(vertices, indices);
     }
 
     @Override
@@ -32,11 +53,11 @@ public class TestGame implements  Logic{
 
     @Override
     public void update() {
-        color +=direction * 0.01f;
-        if(color >1 ) {
+        color += direction * 0.01f;
+        if(color > 1 ) {
             color = 1.0f;
-        } else if (color <0) {
-            color = 0;
+        } else if (color <= 0) {
+            color = 0.0f;
         }
     }
 
@@ -48,11 +69,12 @@ public class TestGame implements  Logic{
         }
 
         windowManager.setClearColor(color, color, color, 0.0f);
-        renderManager.clear();
+        renderManager.render(model);
     }
 
     @Override
     public void cleanUp() {
         renderManager.cleanUp();
+        objectLoader.cleanUp();
     }
 }

@@ -1,6 +1,6 @@
 package org.elevenqtwo;
 
-import org.elevenqtwo.util.Consts;
+import org.elevenqtwo.util.Constants;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
@@ -65,7 +65,7 @@ public class EngineManager {
 
                 if(frameCounter >= NANOSECOND) {
                     setFps(frames);
-                    windowManager.setTitle(Consts.TITLE + " " + getFps());
+                    windowManager.setTitle(Constants.TITLE + " " + getFps());
                     frames = 0;
                     frameCounter = 0;
                 }

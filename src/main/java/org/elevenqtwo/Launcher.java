@@ -1,6 +1,6 @@
 package org.elevenqtwo;
 
-import org.elevenqtwo.util.Consts;
+import org.elevenqtwo.util.Constants;
 
 public class Launcher {
 
@@ -9,7 +9,7 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        windowManager = new WindowManager(Consts.TITLE, 1600, 800, false);
+        windowManager = new WindowManager(Constants.TITLE, 1600, 800, false);
         game = new TestGame();
         EngineManager engineManager = new EngineManager();
         try {

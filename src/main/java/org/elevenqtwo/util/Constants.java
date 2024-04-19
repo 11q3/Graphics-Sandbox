@@ -1,5 +1,5 @@
 package org.elevenqtwo.util;
 
-public class Consts {
+public class Constants {
     public static final String TITLE = "graphics";
 }
