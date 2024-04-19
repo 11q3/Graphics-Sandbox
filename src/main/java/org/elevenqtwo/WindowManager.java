@@ -1,6 +1,5 @@
-package org.example;
+package org.elevenqtwo;
 
-import org.joml.Matrix4d;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -18,18 +17,15 @@ public class WindowManager {
     private final String title;
 
     private int width;
-    private int heigth;
-
+    private int height;
     private long window;
-
     private boolean resize;
-
     private boolean vSync;
     private final Matrix4f projectionMatrix;
     public WindowManager(String title, int width, int heigth, boolean vSync) {
         this.title = title;
         this.width = width;
-        this.heigth = heigth;
+        this.height = heigth;
         this.vSync = vSync;
         projectionMatrix = new Matrix4f();
     }
@@ -49,21 +45,21 @@ public class WindowManager {
             GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 
             boolean maximised = false;
-            if(width == 0 || heigth == 0) {
+            if(width == 0 || height == 0) {
                 width = 100;
-                heigth = 100;
+                height = 100;
                 GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, GLFW.GLFW_TRUE);
                 maximised = false;
             }
 
-            window = GLFW.glfwCreateWindow(width, heigth, title, MemoryUtil.NULL, MemoryUtil.NULL);
+            window = GLFW.glfwCreateWindow(width, height, title, MemoryUtil.NULL, MemoryUtil.NULL);
             if(window == MemoryUtil.NULL) {
                 throw new RuntimeException("Failed to create GLFW window");
             }
 
-            GLFW.glfwSetFramebufferSizeCallback(window, (window, width, heigth) -> {
+            GLFW.glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
                 this.width = width;
-                this.heigth = heigth;
+                this.height = height;
                 this.setResize(true);
             } );
 
@@ -78,7 +74,7 @@ public class WindowManager {
             } else {
                 GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
                 GLFW.glfwSetWindowPos(window, (vidMode.width() - width) /2,
-                        (vidMode.height()- heigth) /2 );
+                        (vidMode.height()- height) /2 );
             }
 
             GLFW.glfwMakeContextCurrent(window);
@@ -113,6 +109,7 @@ public class WindowManager {
 
     public boolean isKeyPressed(int keycode) {
         return GLFW.glfwGetKey(window, keycode) == GLFW.GLFW_PRESS;
+
     }
 
     public boolean windowShouldClose() {
@@ -131,8 +128,8 @@ public class WindowManager {
         return width;
     }
 
-    public int getHeigth() {
-        return heigth;
+    public int getHeight() {
+        return height;
     }
 
     public long getWindow() {
@@ -152,7 +149,7 @@ public class WindowManager {
     }
 
     public Matrix4f updateProjectionMatrix() {
-        float aspectRatio = (float) width / heigth;
+        float aspectRatio = (float) width / height;
         return projectionMatrix.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
     }
 
