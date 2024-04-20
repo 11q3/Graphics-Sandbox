@@ -1,5 +1,6 @@
 package org.elevenqtwo.core;
 
+import org.elevenqtwo.game.Camera;
 import org.elevenqtwo.game.Launcher;
 import org.elevenqtwo.graphics.Entity;
 import org.elevenqtwo.util.Transformation;
@@ -25,13 +26,17 @@ public class RenderManager {
         shaderManager.link();
         shaderManager.createUniform("textureSampler");
         shaderManager.createUniform("transformationMatrix");
+        shaderManager.createUniform("projectionMatrix");
+        shaderManager.createUniform("viewMatrix");
     }
 
-    public void render(Entity entity) {
+    public void render(Entity entity, Camera camera) {
         clear();
         shaderManager.bind();
         shaderManager.setUniform("textureSampler", 0);
         shaderManager.setUniform("transformationMatrix", Transformation.createTransformationMatrix(entity));
+        shaderManager.setUniform("projectionMatrix", windowManager.updateProjectionMatrix());
+        shaderManager.setUniform("viewMatrix", Transformation.getViewMatrix(camera));
         GL30.glBindVertexArray(entity.getModel().getId());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
