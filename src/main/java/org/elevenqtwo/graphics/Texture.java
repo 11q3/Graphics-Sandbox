@@ -1,4 +1,4 @@
-package org.elevenqtwo.model;
+package org.elevenqtwo.graphics;
 
 public class Texture {
     private final int id;

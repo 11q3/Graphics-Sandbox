@@ -1,5 +1,7 @@
-package org.elevenqtwo;
+package org.elevenqtwo.core;
 
+import org.elevenqtwo.game.Launcher;
+import org.elevenqtwo.game.GameLogic;
 import org.elevenqtwo.util.Constants;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -13,7 +15,7 @@ public class EngineManager {
 
     private WindowManager windowManager;
     private GLFWErrorCallback errorCallback;
-    private Logic gameLogic;
+    private GameLogic gameLogic;
 
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));

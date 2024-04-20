@@ -1,6 +1,6 @@
-package org.elevenqtwo;
+package org.elevenqtwo.graphics;
 
-import org.elevenqtwo.model.Model;
+import org.elevenqtwo.graphics.Model;
 import org.elevenqtwo.util.Utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;

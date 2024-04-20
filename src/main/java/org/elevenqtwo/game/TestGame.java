@@ -1,11 +1,16 @@
-package org.elevenqtwo;
+package org.elevenqtwo.game;
 
-import org.elevenqtwo.model.Model;
-import org.elevenqtwo.model.Texture;
+import org.elevenqtwo.core.RenderManager;
+import org.elevenqtwo.core.WindowManager;
+import org.elevenqtwo.graphics.Entity;
+import org.elevenqtwo.graphics.Model;
+import org.elevenqtwo.graphics.ObjectLoader;
+import org.elevenqtwo.graphics.Texture;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-public class TestGame implements Logic{
+public class TestGame implements GameLogic {
 
     private int direction = 0;
     private float color = 0.0f;
@@ -13,8 +18,7 @@ public class TestGame implements Logic{
     private final RenderManager renderManager;
     private final ObjectLoader objectLoader;
     private final WindowManager windowManager;
-
-    private Model model;
+    private Entity entity;
 
     public TestGame() {
         renderManager = new RenderManager();
@@ -45,9 +49,11 @@ public class TestGame implements Logic{
                 1, 0
         };
 
-        model = objectLoader.loadModel(vertices, textureCoords, indices);
+        Model model = objectLoader.loadModel(vertices, textureCoords, indices);
         model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/texture2.png")));
+        entity = new Entity(model, new Vector3f(1,0,0), new Vector3f(0,0,0), 1);
     }
+
 
     @Override
     public void input() {
@@ -66,6 +72,11 @@ public class TestGame implements Logic{
         } else if (color <= 0) {
             color = 0.0f;
         }
+
+        if(entity.getPos().x < -1.5f) {
+            entity.getPos().x = 1.5f;
+        }
+        entity.getPos().x -= 0.01f;
     }
 
     @Override
@@ -76,7 +87,7 @@ public class TestGame implements Logic{
         }
 
         windowManager.setClearColor(color, color, color, 0.0f);
-        renderManager.render(model);
+        renderManager.render(entity);
     }
 
     @Override

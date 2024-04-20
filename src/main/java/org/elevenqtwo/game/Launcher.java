@@ -1,5 +1,7 @@
-package org.elevenqtwo;
+package org.elevenqtwo.game;
 
+import org.elevenqtwo.core.EngineManager;
+import org.elevenqtwo.core.WindowManager;
 import org.elevenqtwo.util.Constants;
 
 public class Launcher {

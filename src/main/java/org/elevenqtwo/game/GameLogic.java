@@ -1,6 +1,6 @@
-package org.elevenqtwo;
+package org.elevenqtwo.game;
 
-public interface Logic {
+public interface GameLogic {
 
     void init() throws Exception;
 

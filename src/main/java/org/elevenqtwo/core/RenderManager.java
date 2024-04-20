@@ -1,6 +1,8 @@
-package org.elevenqtwo;
+package org.elevenqtwo.core;
 
-import org.elevenqtwo.model.Model;
+import org.elevenqtwo.game.Launcher;
+import org.elevenqtwo.graphics.Entity;
+import org.elevenqtwo.util.Transformation;
 import org.elevenqtwo.util.Utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -22,18 +24,20 @@ public class RenderManager {
         shaderManager.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
         shaderManager.link();
         shaderManager.createUniform("textureSampler");
+        shaderManager.createUniform("transformationMatrix");
     }
 
-    public void render(Model model) {
+    public void render(Entity entity) {
         clear();
         shaderManager.bind();
         shaderManager.setUniform("textureSampler", 0);
-        GL30.glBindVertexArray(model.getId());
+        shaderManager.setUniform("transformationMatrix", Transformation.createTransformationMatrix(entity));
+        GL30.glBindVertexArray(entity.getModel().getId());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
-        GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModel().getId());
+        GL11.glDrawElements(GL11.GL_TRIANGLES, entity.getModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);

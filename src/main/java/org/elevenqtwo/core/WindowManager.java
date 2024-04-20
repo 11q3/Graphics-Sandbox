@@ -1,4 +1,4 @@
-package org.elevenqtwo;
+package org.elevenqtwo.core;
 
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
