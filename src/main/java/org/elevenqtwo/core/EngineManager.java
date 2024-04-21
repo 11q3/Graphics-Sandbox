@@ -2,27 +2,32 @@ package org.elevenqtwo.core;
 
 import org.elevenqtwo.game.Launcher;
 import org.elevenqtwo.game.GameLogic;
+import org.elevenqtwo.game.MouseInput;
 import org.elevenqtwo.util.Constants;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class EngineManager {
     public static final long NANOSECOND = 1000000000L;
-    public static final float FRAMERATE = 1000;
+    public static float framerate = 1000;
     private static int fps;
-    private static float frameTime = 1.0f / FRAMERATE;
+    private static float frameTime = 1.0f / framerate;
     private boolean isRunning;
 
     private WindowManager windowManager;
+    private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
     private GameLogic gameLogic;
 
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
+
         windowManager = Launcher.getWindowManager();
         gameLogic = Launcher.getGameLogic();
+        mouseInput = new MouseInput();
         windowManager.init();
         gameLogic.init();
+        mouseInput.init();
     }
 
     public void startEngine() throws Exception {
@@ -87,6 +92,7 @@ public class EngineManager {
     }
 
     private void input() {
+        mouseInput.input();
         gameLogic.input();
     }
 
@@ -96,7 +102,7 @@ public class EngineManager {
     }
 
     private void update() {
-        gameLogic.update();
+        gameLogic.update(mouseInput);
     }
 
     private void cleanUp() {

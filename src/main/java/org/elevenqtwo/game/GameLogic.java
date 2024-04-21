@@ -6,7 +6,7 @@ public interface GameLogic {
 
     void input();
 
-    void update();
+    void update(MouseInput mouseInput);
     void render();
     void cleanUp();
 }
