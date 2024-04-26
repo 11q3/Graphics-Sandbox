@@ -15,7 +15,7 @@ public class ShaderManager {
     private int fragmentShaderID;
     private final Map<String, Integer> uniforms;
 
-    public ShaderManager() throws  Exception {
+    public ShaderManager() throws Exception {
         programID = GL20.glCreateProgram();
         if(programID == 0) {
             throw new Exception("Could not create shader");

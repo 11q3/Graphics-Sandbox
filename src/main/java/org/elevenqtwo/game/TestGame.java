@@ -36,60 +36,97 @@ public class TestGame implements GameLogic {
 
 
         float[] vertices = new float[] {
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, 0.5f, -0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
+                // Front face
+                -0.5f, 0.5f, 0.5f, // top left
+                -0.5f, -0.5f, 0.5f, // bottom left
+                0.5f, -0.5f, 0.5f, // bottom right
+                0.5f, 0.5f, 0.5f, // top right
+
+                // Back face
+                -0.5f, 0.5f, -0.5f, // top left
+                -0.5f, -0.5f, -0.5f, // bottom left
+                0.5f, -0.5f, -0.5f, // bottom right
+                0.5f, 0.5f, -0.5f, // top right
+
+                // Left face
+                -0.5f, 0.5f, 0.5f, // top left
+                -0.5f, -0.5f, 0.5f, // bottom left
+                -0.5f, -0.5f, -0.5f, // bottom right
+                -0.5f, 0.5f, -0.5f, // top right
+
+                // Right face
+                0.5f, 0.5f, 0.5f, // top left
+                0.5f, -0.5f, 0.5f, // bottom left
+                0.5f, -0.5f, -0.5f, // bottom right
+                0.5f, 0.5f, -0.5f, // top right
+
+                // Top face
+                -0.5f, 0.5f, 0.5f, // top left
+                0.5f, 0.5f, 0.5f, // top right
+                0.5f, 0.5f, -0.5f, // bottom right
+                -0.5f, 0.5f, -0.5f, // bottom left
+
+                // Bottom face
+                -0.5f, -0.5f, 0.5f, // top left
+                0.5f, -0.5f, 0.5f, // top right
+                0.5f, -0.5f, -0.5f, // bottom right
+                -0.5f, -0.5f, -0.5f  // bottom left
         };
         float[] textureCoords = new float[]{
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                0.5f, 0.0f,
-                0.0f, 0.0f,
-                0.5f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                0.0f, 1.0f,
-                0.5f, 1.0f,
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.0f,
-                0.5f, 0.5f,
-                0.5f, 0.0f,
-                1.0f, 0.0f,
-                0.5f, 0.5f,
-                1.0f, 0.5f,
+                // Front face
+                0, 0, // top left
+                0, 1, // bottom left
+                1, 1, // bottom right
+                1, 0, // top right
+
+                // Back face
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0,
+
+                // Left face
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0,
+
+                // Right face
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0,
+
+                // Top face
+                0, 0,
+                1, 0,
+                1, 1,
+                0, 1,
+
+                // Bottom face
+                0, 0,
+                1, 0,
+                1, 1,
+                0, 1
         };
         int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
-                8, 10, 11, 9, 8, 11,
-                12, 13, 7, 5, 12, 7,
-                14, 15, 6, 4, 14, 6,
-                16, 18, 19, 17, 16, 19,
-                4, 6, 7, 5, 4, 7,
+                0, 1, 3,
+                3, 1, 2,
+                4, 5, 7,
+                7, 5, 6,
+                8, 9, 11,
+                11, 9, 10,
+                12, 13, 15,
+                15, 13, 14,
+                16, 17, 19,
+                19, 17, 18,
+                20, 21, 23,
+                23, 21, 22,
         };
 
+
         Model model = objectLoader.loadModel(vertices, textureCoords, indices);
-        model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/texture2.png")));
+        model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
         entity = new Entity(model, new Vector3f(0,0,-5), new Vector3f(0,0,0), 1);
         GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 

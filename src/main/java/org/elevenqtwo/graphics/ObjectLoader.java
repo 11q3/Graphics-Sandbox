@@ -23,12 +23,11 @@ public class ObjectLoader {
     public Model loadModel(float[] vertices, float[] textureCoords, int[] indices) {
         int id = createVAD();
         storeIndicesBuffer(indices);
-        storeDataInAttributeList(0, 3, vertices);
-        storeDataInAttributeList(1, 2, textureCoords);
+        storeDataInAttributeList(0, vertices);
+        storeDataInAttributeList(1, textureCoords);
         unbind();
         return new Model(id, indices.length);
     }
-
     public int loadTexture(String fileName) throws Exception {
         int width;
         int height;
@@ -72,13 +71,16 @@ public class ObjectLoader {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
     }
 
-    private void storeDataInAttributeList(int attributeNumber, int vertexCount, float[] data) {
+    private void storeDataInAttributeList(int attributeNumber, float[] data) {
         int vbo = GL15.glGenBuffers();
         vbos.add(vbo);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
         FloatBuffer buffer = Utils.storeDataInFloatBuffer(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attributeNumber, vertexCount, GL11.GL_FLOAT, false, 0, 0);
+        if (attributeNumber == 0) {
+            GL20.glVertexAttribPointer(attributeNumber, 3, GL11.GL_FLOAT, false, 0, 0);
+        } else if (attributeNumber == 1) {
+            GL20.glVertexAttribPointer(attributeNumber, 2, GL11.GL_FLOAT, false, 2 * Float.BYTES, 0);        }
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
