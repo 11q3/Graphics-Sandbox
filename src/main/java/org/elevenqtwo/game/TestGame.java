@@ -53,35 +53,39 @@ public class TestGame implements GameLogic {
 
 
     @Override
-    public void input() {
+    public void input(double deltaTime) {
         mouseInput.update();
+
+        double mouseX = mouseInput.getDX();
+        double mouseY = mouseInput.getDY();
+
+        camera.moveRotation((float) (mouseX * Constants.CAMERA_SENSITIVITY),
+                (float) (mouseY * Constants.CAMERA_SENSITIVITY),
+                0, deltaTime);
 
         cameraIncrement.set(0, 0, 0);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
-            cameraIncrement.z = -1;
+            cameraIncrement.z = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
-            cameraIncrement.z = 1;
+            cameraIncrement.z = (float) (Constants.CAMERA_SPEED * 1 * deltaTime);
 
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
-            cameraIncrement.x = -1;
+            cameraIncrement.x = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
-            cameraIncrement.x = 1;
+            cameraIncrement.x = (float) (Constants.CAMERA_SPEED * deltaTime);
 
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
-            cameraIncrement.y = -1;
+            cameraIncrement.y = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
-            cameraIncrement.y = 1;
+            cameraIncrement.y = (float) (Constants.CAMERA_SPEED * 1 * deltaTime);
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
         camera.movePosition(cameraIncrement.x * Constants.CAMERA_SPEED,
                 cameraIncrement.y * Constants.CAMERA_SPEED,
-                cameraIncrement.z * Constants.CAMERA_SPEED);
-
-        float rotX = mouseInput.getDX() * Constants.CAMERA_SENSITIVITY;
-        float rotY = mouseInput.getDY() * Constants.CAMERA_SENSITIVITY;
-        camera.moveRotation(rotX, rotY, 0);
+                cameraIncrement.z * Constants.CAMERA_SPEED,
+                deltaTime);
 
         entity.incrementRotation(0.0f, 0.0f, 0.0f);
     }
