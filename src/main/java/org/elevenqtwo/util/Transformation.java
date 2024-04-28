@@ -21,9 +21,9 @@ public class Transformation {
         Vector3f rot = camera.getRotation();
         Matrix4f matrix4f = new Matrix4f();
         matrix4f.identity();
-        matrix4f.rotate((float) Math.toRadians(rot.x), new Vector3f(1,0,0))
-                .rotate((float) Math.toRadians(rot.y), new Vector3f(0,1,0))
-                .rotate((float) Math.toRadians(rot.z), new Vector3f(0,0,1));
+        matrix4f.rotate((float) Math.toRadians(rot.x), new Vector3f(1, 0, 0))
+                .rotate((float) Math.toRadians(rot.y), new Vector3f(0, 1, 0))
+                .rotate((float) Math.toRadians(rot.z), new Vector3f(0, 0, 1));
         matrix4f.translate(-pos.x, -pos.y, -pos.z);
         return matrix4f;
     }

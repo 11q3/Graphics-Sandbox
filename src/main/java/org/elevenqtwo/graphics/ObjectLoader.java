@@ -28,17 +28,18 @@ public class ObjectLoader {
         unbind();
         return new Model(id, indices.length);
     }
+
     public int loadTexture(String fileName) throws Exception {
         int width;
         int height;
         ByteBuffer buffer;
-        try(MemoryStack stack = MemoryStack.stackPush()) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer c = stack.mallocInt(1);
 
-            buffer = STBImage.stbi_load(fileName, w,h,c,4);
-            if(buffer == null) {
+            buffer = STBImage.stbi_load(fileName, w, h, c, 4);
+            if (buffer == null) {
                 throw new Exception("Image file " + fileName + " not loaded " + STBImage.stbi_failure_reason());
             }
             width = w.get();
@@ -80,7 +81,8 @@ public class ObjectLoader {
         if (attributeNumber == 0) {
             GL20.glVertexAttribPointer(attributeNumber, 3, GL11.GL_FLOAT, false, 0, 0);
         } else if (attributeNumber == 1) {
-            GL20.glVertexAttribPointer(attributeNumber, 2, GL11.GL_FLOAT, false, 2 * Float.BYTES, 0);        }
+            GL20.glVertexAttribPointer(attributeNumber, 2, GL11.GL_FLOAT, false, 2 * Float.BYTES, 0);
+        }
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 
@@ -92,10 +94,10 @@ public class ObjectLoader {
         for (int vao : vaos) {
             GL30.glDeleteVertexArrays(vao);
         }
-        for(int vbo : vbos) {
+        for (int vbo : vbos) {
             GL30.glDeleteBuffers(vbo);
         }
-        for(int texture : textures) {
+        for (int texture : textures) {
             GL11.glDeleteTextures(texture);
         }
     }

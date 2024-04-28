@@ -13,7 +13,7 @@ public class Model {
         this.texture = texture;
     }
 
-    public Model (int id, int vertexCount) {
+    public Model(int id, int vertexCount) {
         this.id = id;
         this.vertexCount = vertexCount;
     }

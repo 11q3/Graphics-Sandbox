@@ -17,6 +17,7 @@ public class TestGame implements GameLogic {
     private final RenderManager renderManager;
     private final ObjectLoader objectLoader;
     private final WindowManager windowManager;
+    private MouseInput mouseInput;
     private Entity entity;
     private Camera camera;
 
@@ -27,15 +28,13 @@ public class TestGame implements GameLogic {
         windowManager = Launcher.getWindowManager();
         objectLoader = new ObjectLoader();
         camera = new Camera();
-        cameraInc = new Vector3f(0,0,0);
+        cameraInc = new Vector3f(0, 0, 0);
+        mouseInput = new MouseInput(windowManager);
     }
 
     @Override
-    public void init() throws Exception {
-        renderManager.init();
-
-
-        float[] vertices = new float[] {
+    public void init() {
+        float[] vertices = new float[]{
                 // Front face
                 -0.5f, 0.5f, 0.5f, // top left
                 -0.5f, -0.5f, 0.5f, // bottom left
@@ -125,53 +124,58 @@ public class TestGame implements GameLogic {
         };
 
 
-        Model model = objectLoader.loadModel(vertices, textureCoords, indices);
-        model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
-        entity = new Entity(model, new Vector3f(0,0,-5), new Vector3f(0,0,0), 1);
-        GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+        try {
+            renderManager.init();
+            Model model = objectLoader.loadModel(vertices, textureCoords, indices);
+            model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
 
+            entity = new Entity(model, new Vector3f(0, 0, -5), new Vector3f(0, 0, 0), 1);
+            GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
     }
 
 
     @Override
     public void input() {
-        cameraInc.set(0,0,0);
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
+        mouseInput.update();
+
+        cameraInc.set(0, 0, 0);
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
             cameraInc.z = -1;
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
             cameraInc.z = 1;
 
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
             cameraInc.x = -1;
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
             cameraInc.x = 1;
 
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
             cameraInc.y = -1;
-        if(windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
             cameraInc.y = 1;
     }
 
     @Override
-    public void update(MouseInput mouseInput) {
+    public void update() {
         camera.movePosition(cameraInc.x * Constants.CAMERA_SPEED,
                 cameraInc.y * Constants.CAMERA_SPEED,
                 cameraInc.z * Constants.CAMERA_SPEED);
 
+        float rotX = mouseInput.getDX() * Constants.CAMERA_SENSITIVITY;
+        float rotY = mouseInput.getDY() * Constants.CAMERA_SENSITIVITY;
+        camera.moveRotation(rotX, rotY, 0);
 
-        //if(mouseInput.isLeftButtonPress()) {
-            Vector2f rotVec = mouseInput.getDisplayVector();
-            camera.moveRotation(rotVec.x * Constants.CAMERA_SENSITIVITY,
-                    rotVec.y * Constants.CAMERA_SENSITIVITY, 0);
-
-       // }
         entity.incRotation(0.0f, 0.0f, 0.0f);
     }
 
     @Override
     public void render() {
-        if( windowManager.isResize()) {
-            GL11.glViewport(0,0,windowManager.getWidth(), windowManager.getHeight());
+        if (windowManager.isResize()) {
+            GL11.glViewport(0, 0, windowManager.getWidth(), windowManager.getHeight());
             windowManager.setResize(false);
         }
 

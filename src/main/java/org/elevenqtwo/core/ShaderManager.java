@@ -17,7 +17,7 @@ public class ShaderManager {
 
     public ShaderManager() throws Exception {
         programID = GL20.glCreateProgram();
-        if(programID == 0) {
+        if (programID == 0) {
             throw new Exception("Could not create shader");
         }
         uniforms = new HashMap<>();
@@ -32,7 +32,7 @@ public class ShaderManager {
     }
 
     public void setUniform(String uniformName, Matrix4f value) {
-        try(MemoryStack stack = MemoryStack.stackPush()) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
             GL20.glUniformMatrix4fv(uniforms.get(uniformName), false,
                     value.get(stack.mallocFloat(16)));
         }
@@ -58,24 +58,25 @@ public class ShaderManager {
         GL20.glUniform1f(uniforms.get(uniformName), value);
     }
 
-    public void createVertexShader(String shaderCode) throws  Exception {
+    public void createVertexShader(String shaderCode) throws Exception {
         vertexShaderID = createShader(shaderCode, GL20.GL_VERTEX_SHADER);
     }
-    public void createFragmentShader(String shaderCode) throws  Exception {
+
+    public void createFragmentShader(String shaderCode) throws Exception {
         fragmentShaderID = createShader(shaderCode, GL20.GL_FRAGMENT_SHADER);
     }
 
-    public int createShader(String shaderCode, int shaderType) throws  Exception {
+    public int createShader(String shaderCode, int shaderType) throws Exception {
         int shaderID = GL20.glCreateShader(shaderType);
-        if(shaderID == 0) {
-            throw  new Exception("Error creating shader. Type: " + shaderType);
+        if (shaderID == 0) {
+            throw new Exception("Error creating shader. Type: " + shaderType);
         }
 
         GL20.glShaderSource(shaderID, shaderCode);
         GL20.glCompileShader(shaderID);
 
-        if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == 0) {
-            throw  new Exception("Error compiling shader code: TYPE " + shaderType +
+        if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == 0) {
+            throw new Exception("Error compiling shader code: TYPE " + shaderType +
                     " Info " + GL20.glGetShaderInfoLog(shaderID, 1024));
         }
         GL20.glAttachShader(programID, shaderID);
@@ -85,22 +86,22 @@ public class ShaderManager {
 
     public void link() throws Exception {
         GL20.glLinkProgram(programID);
-        if(GL20.glGetProgrami(programID, GL20.GL_LINK_STATUS) == 0) {
-            throw  new Exception("Error linking shader code" +
+        if (GL20.glGetProgrami(programID, GL20.GL_LINK_STATUS) == 0) {
+            throw new Exception("Error linking shader code" +
                     " Info " + GL20.glGetShaderInfoLog(programID, 1024));
         }
 
-        if(vertexShaderID != 0) {
+        if (vertexShaderID != 0) {
             GL20.glDetachShader(programID, vertexShaderID);
         }
 
-        if(fragmentShaderID != 0) {
+        if (fragmentShaderID != 0) {
             GL20.glDetachShader(programID, fragmentShaderID);
         }
 
         GL20.glValidateProgram(programID);
 
-        if(GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) == 0) {
+        if (GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) == 0) {
             throw new Exception("Unable to validate shader code: " + GL20.glGetProgramInfoLog(programID, 1024));
         }
     }
@@ -116,7 +117,7 @@ public class ShaderManager {
 
     public void cleanUp() {
         unbind();
-        if(programID != 0) {
+        if (programID != 0) {
             GL20.glDeleteProgram(programID);
         }
     }

@@ -24,7 +24,7 @@ public class EngineManager {
 
         windowManager = Launcher.getWindowManager();
         gameLogic = Launcher.getGameLogic();
-        mouseInput = new MouseInput();
+        mouseInput = new MouseInput(windowManager);
         windowManager.init();
         gameLogic.init();
         mouseInput.init();
@@ -32,16 +32,17 @@ public class EngineManager {
 
     public void startEngine() throws Exception {
         init();
-        if(isRunning) {
+        if (isRunning) {
             return;
         }
         run();
     }
 
     private void stop() {
-        if(!isRunning) {
+        if (!isRunning) {
             return;
-        } isRunning = false;
+        }
+        isRunning = false;
     }
 
     public void run() {
@@ -51,10 +52,10 @@ public class EngineManager {
         long lastTime = System.nanoTime();
         double unprocessedTime = 0;
 
-        while(isRunning) {
+        while (isRunning) {
             boolean render = false;
             long startTime = System.nanoTime();
-            long passedTime  = startTime - lastTime;
+            long passedTime = startTime - lastTime;
             lastTime = startTime;
 
             unprocessedTime += passedTime / (double) NANOSECOND;
@@ -62,15 +63,15 @@ public class EngineManager {
 
             input();
 
-            while(unprocessedTime > frameTime) {
+            while (unprocessedTime > frameTime) {
                 render = true;
                 unprocessedTime -= frameTime;
 
-                if(windowManager.windowShouldClose()) {
+                if (windowManager.windowShouldClose()) {
                     stop();
                 }
 
-                if(frameCounter >= NANOSECOND) {
+                if (frameCounter >= NANOSECOND) {
                     setFps(frames);
                     windowManager.setTitle(Constants.TITLE + " " + getFps());
                     frames = 0;
@@ -78,7 +79,7 @@ public class EngineManager {
                 }
             }
 
-            if(render) {
+            if (render) {
                 update();
                 render();
                 frames++;
@@ -92,7 +93,6 @@ public class EngineManager {
     }
 
     private void input() {
-        mouseInput.input();
         gameLogic.input();
     }
 
@@ -102,7 +102,7 @@ public class EngineManager {
     }
 
     private void update() {
-        gameLogic.update(mouseInput);
+        gameLogic.update();
     }
 
     private void cleanUp() {

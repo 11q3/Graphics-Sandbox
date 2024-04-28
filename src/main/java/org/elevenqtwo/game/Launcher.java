@@ -20,6 +20,7 @@ public class Launcher {
             e.printStackTrace();
         }
     }
+
     public static WindowManager getWindowManager() {
         return windowManager;
     }
