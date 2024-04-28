@@ -1,7 +1,8 @@
 package org.elevenqtwo.graphics;
 
 import org.elevenqtwo.graphics.Model;
-import org.elevenqtwo.util.Utils;
+
+import org.elevenqtwo.util.BufferAllocator;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectLoader {
-    private List<Integer> vaos = new ArrayList<>();
-    private List<Integer> vbos = new ArrayList<>();
-    private List<Integer> textures = new ArrayList<>();
+    private final List<Integer> vaos = new ArrayList<>();
+    private final List<Integer> vbos = new ArrayList<>();
+    private final List<Integer> textures = new ArrayList<>();
 
     public Model loadModel(float[] vertices, float[] textureCoords, int[] indices) {
         int id = createVAD();
@@ -68,7 +69,7 @@ public class ObjectLoader {
         int vbo = GL15.glGenBuffers();
         vbos.add(vbo);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vbo);
-        IntBuffer buffer = Utils.storeDataInIntBuffer(indices);
+        IntBuffer buffer = BufferAllocator.allocateBuffer(indices);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
     }
 
@@ -76,7 +77,7 @@ public class ObjectLoader {
         int vbo = GL15.glGenBuffers();
         vbos.add(vbo);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-        FloatBuffer buffer = Utils.storeDataInFloatBuffer(data);
+        FloatBuffer buffer = BufferAllocator.allocateBuffer(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
         if (attributeNumber == 0) {
             GL20.glVertexAttribPointer(attributeNumber, 3, GL11.GL_FLOAT, false, 0, 0);
@@ -101,4 +102,6 @@ public class ObjectLoader {
             GL11.glDeleteTextures(texture);
         }
     }
+
+
 }

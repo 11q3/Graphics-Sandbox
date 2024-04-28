@@ -11,7 +11,7 @@ public class EngineManager {
     public static final long NANOSECOND = 1000000000L;
     public static float framerate = 1000;
     private static int fps;
-    private static float frameTime = 1.0f / framerate;
+    private static final float frameTime = 1.0f / framerate;
     private boolean isRunning;
 
     private WindowManager windowManager;
@@ -19,7 +19,7 @@ public class EngineManager {
     private GLFWErrorCallback errorCallback;
     private GameLogic gameLogic;
 
-    private void init() throws Exception {
+    private void init()  {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 
         windowManager = Launcher.getWindowManager();

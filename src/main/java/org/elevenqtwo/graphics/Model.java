@@ -1,11 +1,10 @@
 package org.elevenqtwo.graphics;
 
 public class Model {
-    private int id;
-    private int vertexCount;
+    private final int id;
+    private final int vertexCount;
     private Texture texture;
 
-    private float rotation;
 
     public Model(int id, int vertexCount, Texture texture) {
         this.id = id;
@@ -21,7 +20,6 @@ public class Model {
     public Model(Model model, Texture texture) {
         this.id = model.getId();
         this.vertexCount = model.getVertexCount();
-        this.texture = texture;
     }
 
     public int getId() {
@@ -32,19 +30,7 @@ public class Model {
         return vertexCount;
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
-
     public void setTexture(Texture texture) {
         this.texture = texture;
-    }
-
-    public void setRotation(float rotation) {
-        this.rotation += rotation;
-    }
-
-    public float getRotation() {
-        return rotation;
     }
 }

@@ -4,6 +4,8 @@ import org.elevenqtwo.core.EngineManager;
 import org.elevenqtwo.core.WindowManager;
 import org.elevenqtwo.util.Constants;
 
+import java.util.ArrayList;
+
 public class Launcher {
 
     public static WindowManager windowManager;
@@ -11,13 +13,13 @@ public class Launcher {
 
     public static void main(String[] args) {
 
-        windowManager = new WindowManager(Constants.TITLE, 1600, 1600, true);
+        windowManager = new WindowManager(Constants.TITLE, 1600, 1600, false);
         game = new TestGame();
         EngineManager engineManager = new EngineManager();
         try {
             engineManager.startEngine();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Unable to launch engine: " + e.getMessage());
         }
     }
 

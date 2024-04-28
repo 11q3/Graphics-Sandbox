@@ -20,13 +20,13 @@ public class WindowManager {
     private int height;
     private long window;
     private boolean resize;
-    private boolean vSync;
+    private final boolean vSync;
     private final Matrix4f projectionMatrix;
 
-    public WindowManager(String title, int width, int heigth, boolean vSync) {
+    public WindowManager(String title, int width, int height, boolean vSync) {
         this.title = title;
         this.width = width;
-        this.height = heigth;
+        this.height = height;
         this.vSync = vSync;
         projectionMatrix = new Matrix4f();
     }
@@ -45,12 +45,10 @@ public class WindowManager {
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 
-        boolean maximised = false;
         if (width == 0 || height == 0) {
             width = 100;
             height = 100;
             GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, GLFW.GLFW_TRUE);
-            maximised = false;
         }
 
         window = GLFW.glfwCreateWindow(width, height, title, MemoryUtil.NULL, MemoryUtil.NULL);
@@ -70,18 +68,17 @@ public class WindowManager {
             }
         });
 
-        if (maximised) {
-            GLFW.glfwMaximizeWindow(window);
-        } else {
-            GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-            GLFW.glfwSetWindowPos(window, (vidMode.width() - width) / 2,
-                    (vidMode.height() - height) / 2);
-        }
+        GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+        assert vidMode != null;
+        GLFW.glfwSetWindowPos(window, (vidMode.width() - width) / 2,
+                (vidMode.height() - height) / 2);
 
         GLFW.glfwMakeContextCurrent(window);
 
         if (isVSync()) {
             GLFW.glfwSwapInterval(1);
+        } else {
+            GLFW.glfwSwapInterval(0);
         }
 
         GLFW.glfwShowWindow(window);
@@ -91,8 +88,6 @@ public class WindowManager {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
-        /*GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);*/
     }
 
     public void updateWindow() {
@@ -117,9 +112,6 @@ public class WindowManager {
         return GLFW.glfwWindowShouldClose(window);
     }
 
-    public String getTitle() {
-        return title;
-    }
 
     public void setTitle(String title) {
         GLFW.glfwSetWindowTitle(window, title);
@@ -135,10 +127,6 @@ public class WindowManager {
 
     public long getWindow() {
         return window;
-    }
-
-    public Matrix4f getProjectionMatrix() {
-        return projectionMatrix;
     }
 
     public boolean isVSync() {
@@ -168,10 +156,5 @@ public class WindowManager {
     public Matrix4f updateProjectionMatrix() {
         float aspectRatio = (float) width / height;
         return projectionMatrix.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
-    }
-
-    public Matrix4f updateProjectionMatrix(Matrix4f matrix4f, int width, int heigth) {
-        float aspectRation = (float) width / heigth;
-        return matrix4f.setPerspective(FOV, aspectRation, Z_NEAR, Z_FAR);
     }
 }

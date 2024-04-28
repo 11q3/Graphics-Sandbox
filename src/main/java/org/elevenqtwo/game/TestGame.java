@@ -7,7 +7,6 @@ import org.elevenqtwo.graphics.Model;
 import org.elevenqtwo.graphics.ObjectLoader;
 import org.elevenqtwo.graphics.Texture;
 import org.elevenqtwo.util.Constants;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -21,20 +20,91 @@ public class TestGame implements GameLogic {
     private Entity entity;
     private Camera camera;
 
-    Vector3f cameraInc;
+    Vector3f cameraIncrement;
 
     public TestGame() {
         renderManager = new RenderManager();
         windowManager = Launcher.getWindowManager();
         objectLoader = new ObjectLoader();
         camera = new Camera();
-        cameraInc = new Vector3f(0, 0, 0);
+        cameraIncrement = new Vector3f(0, 0, 0);
         mouseInput = new MouseInput(windowManager);
     }
 
     @Override
     public void init() {
-        float[] vertices = new float[]{
+        float[] vertices = getVertices();
+        float[] textureCoordinates = getTextureCoordinates();
+        int[] indices = getIndices();
+
+
+        try {
+            GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+            renderManager.init();
+            Model model = objectLoader.loadModel(vertices, textureCoordinates, indices);
+            model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
+
+            entity = new Entity(model, new Vector3f(0, 0, -0), new Vector3f(0, 0, 0), 1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    @Override
+    public void input() {
+        mouseInput.update();
+
+        cameraIncrement.set(0, 0, 0);
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
+            cameraIncrement.z = -1;
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
+            cameraIncrement.z = 1;
+
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
+            cameraIncrement.x = -1;
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
+            cameraIncrement.x = 1;
+
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
+            cameraIncrement.y = -1;
+        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
+            cameraIncrement.y = 1;
+    }
+
+    @Override
+    public void update() {
+        camera.movePosition(cameraIncrement.x * Constants.CAMERA_SPEED,
+                cameraIncrement.y * Constants.CAMERA_SPEED,
+                cameraIncrement.z * Constants.CAMERA_SPEED);
+
+        float rotX = mouseInput.getDX() * Constants.CAMERA_SENSITIVITY;
+        float rotY = mouseInput.getDY() * Constants.CAMERA_SENSITIVITY;
+        camera.moveRotation(rotX, rotY, 0);
+
+        entity.incrementRotation(0.0f, 0.0f, 0.0f);
+    }
+
+    @Override
+    public void render() {
+        if (windowManager.isResize()) {
+            GL11.glViewport(0, 0, windowManager.getWidth(), windowManager.getHeight());
+            windowManager.setResize(false);
+        }
+
+        windowManager.setClearColor(256.0f, 256.0f, 256.0f, 0.0f);
+        renderManager.render(entity, camera);
+    }
+
+    @Override
+    public void cleanUp() {
+        renderManager.cleanUp();
+        objectLoader.cleanUp();
+    }
+
+    public float[] getVertices() {
+        return new float[]{
                 // Front face
                 -0.5f, 0.5f, 0.5f, // top left
                 -0.5f, -0.5f, 0.5f, // bottom left
@@ -71,7 +141,11 @@ public class TestGame implements GameLogic {
                 0.5f, -0.5f, -0.5f, // bottom right
                 -0.5f, -0.5f, -0.5f  // bottom left
         };
-        float[] textureCoords = new float[]{
+
+    }
+
+    public float[] getTextureCoordinates() {
+        return new float[]{
                 // Front face
                 0, 0, // top left
                 0, 1, // bottom left
@@ -108,7 +182,10 @@ public class TestGame implements GameLogic {
                 1, 1,
                 0, 1
         };
-        int[] indices = new int[]{
+    }
+
+    public int[] getIndices() {
+        return new int[]{
                 0, 1, 3,
                 3, 1, 2,
                 4, 5, 7,
@@ -122,70 +199,5 @@ public class TestGame implements GameLogic {
                 20, 21, 23,
                 23, 21, 22,
         };
-
-
-        try {
-            renderManager.init();
-            Model model = objectLoader.loadModel(vertices, textureCoords, indices);
-            model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
-
-            entity = new Entity(model, new Vector3f(0, 0, -5), new Vector3f(0, 0, 0), 1);
-            GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        
-    }
-
-
-    @Override
-    public void input() {
-        mouseInput.update();
-
-        cameraInc.set(0, 0, 0);
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
-            cameraInc.z = -1;
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
-            cameraInc.z = 1;
-
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
-            cameraInc.x = -1;
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
-            cameraInc.x = 1;
-
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
-            cameraInc.y = -1;
-        if (windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
-            cameraInc.y = 1;
-    }
-
-    @Override
-    public void update() {
-        camera.movePosition(cameraInc.x * Constants.CAMERA_SPEED,
-                cameraInc.y * Constants.CAMERA_SPEED,
-                cameraInc.z * Constants.CAMERA_SPEED);
-
-        float rotX = mouseInput.getDX() * Constants.CAMERA_SENSITIVITY;
-        float rotY = mouseInput.getDY() * Constants.CAMERA_SENSITIVITY;
-        camera.moveRotation(rotX, rotY, 0);
-
-        entity.incRotation(0.0f, 0.0f, 0.0f);
-    }
-
-    @Override
-    public void render() {
-        if (windowManager.isResize()) {
-            GL11.glViewport(0, 0, windowManager.getWidth(), windowManager.getHeight());
-            windowManager.setResize(false);
-        }
-
-        windowManager.setClearColor(256.0f, 256.0f, 256.0f, 0.0f);
-        renderManager.render(entity, camera);
-    }
-
-    @Override
-    public void cleanUp() {
-        renderManager.cleanUp();
-        objectLoader.cleanUp();
     }
 }

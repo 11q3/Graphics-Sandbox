@@ -4,8 +4,8 @@ import org.elevenqtwo.game.Camera;
 import org.elevenqtwo.game.Launcher;
 import org.elevenqtwo.graphics.Entity;
 import org.elevenqtwo.graphics.Model;
+import org.elevenqtwo.util.ResourceLoader;
 import org.elevenqtwo.util.Transformation;
-import org.elevenqtwo.util.Utils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -22,8 +22,8 @@ public class RenderManager {
 
     public void init() throws Exception {
         shaderManager = new ShaderManager();
-        shaderManager.createVertexShader(Utils.loadResource("/shaders/vertex.vs"));
-        shaderManager.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
+        shaderManager.createVertexShader(ResourceLoader.loadResource("/shaders/vertex.vs"));
+        shaderManager.createFragmentShader(ResourceLoader.loadResource("/shaders/fragment.fs"));
         shaderManager.link();
         shaderManager.createUniform("textureSampler");
         shaderManager.createUniform("transformationMatrix");
