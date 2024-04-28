@@ -34,6 +34,7 @@ public class WindowManager {
     public void init() {
         GLFWErrorCallback.createPrint(System.err).set();
 
+        
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
