@@ -1,5 +1,6 @@
 package org.elevenqtwo.game;
 
+import org.elevenqtwo.core.EngineManager;
 import org.elevenqtwo.core.RenderManager;
 import org.elevenqtwo.core.WindowManager;
 import org.elevenqtwo.graphics.Entity;
@@ -53,7 +54,7 @@ public class TestGame implements GameLogic {
 
 
     @Override
-    public void input(double deltaTime) {
+    public void input() {
         mouseInput.update();
 
         double mouseX = mouseInput.getDX();
@@ -61,33 +62,30 @@ public class TestGame implements GameLogic {
 
         camera.moveRotation((float) (mouseX * Constants.CAMERA_SENSITIVITY),
                 (float) (mouseY * Constants.CAMERA_SENSITIVITY),
-                0, deltaTime);
+                0);
 
         cameraIncrement.set(0, 0, 0);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_W))
-            cameraIncrement.z = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
+            cameraIncrement.z = (Constants.CAMERA_SPEED * -1);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_S))
-            cameraIncrement.z = (float) (Constants.CAMERA_SPEED * 1 * deltaTime);
+            cameraIncrement.z = (Constants.CAMERA_SPEED * 1);
 
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_A))
-            cameraIncrement.x = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
+            cameraIncrement.x = (Constants.CAMERA_SPEED * -1);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_D))
-            cameraIncrement.x = (float) (Constants.CAMERA_SPEED * deltaTime);
+            cameraIncrement.x = (Constants.CAMERA_SPEED);
 
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT))
-            cameraIncrement.y = (float) (Constants.CAMERA_SPEED * -1 * deltaTime);
+            cameraIncrement.y =(Constants.CAMERA_SPEED * -1);
         if (windowManager.isKeyPressed(GLFW.GLFW_KEY_SPACE))
-            cameraIncrement.y = (float) (Constants.CAMERA_SPEED * 1 * deltaTime);
+            cameraIncrement.y = (Constants.CAMERA_SPEED * 1);
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update() {
         camera.movePosition(cameraIncrement.x * Constants.CAMERA_SPEED,
                 cameraIncrement.y * Constants.CAMERA_SPEED,
-                cameraIncrement.z * Constants.CAMERA_SPEED,
-                deltaTime);
-
-        entity.incrementRotation(0.0f, 0.0f, 0.0f);
+                cameraIncrement.z * Constants.CAMERA_SPEED);
     }
 
     @Override
@@ -203,5 +201,17 @@ public class TestGame implements GameLogic {
                 20, 21, 23,
                 23, 21, 22,
         };
+    }
+
+    private void adjustCameraSpeedForFps() {
+        // Предполагаем, что TARGET_FRAMERATE равно 60
+        float targetFramerate = 60;
+        float actualFramerate = EngineManager.getFps();
+
+        // Вычисляем коэффициент замедления
+        float slowdownFactor = targetFramerate / actualFramerate;
+
+        // Применяем коэффициент замедления к скорости движения камеры
+        cameraIncrement.mul(slowdownFactor);
     }
 }

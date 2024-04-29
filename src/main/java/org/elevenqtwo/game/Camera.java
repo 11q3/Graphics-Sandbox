@@ -12,24 +12,24 @@ public class Camera {
         rotation = new Vector3f(0, 0, 0);
     }
 
-    public void movePosition(float x, float y, float z, double deltaTime) {
+    public void movePosition(float x, float y, float z) {
         if (z!= 0) {
-            position.x += (float) (Math.sin(Math.toRadians(rotation.y)) * -1.0 * z * deltaTime);
-            position.z += (float) (Math.cos(Math.toRadians(rotation.y)) * z * deltaTime);
+            position.x += (float) (Math.sin(Math.toRadians(rotation.y)) * -1.0 * z);
+            position.z += (float) (Math.cos(Math.toRadians(rotation.y)) * z);
         }
 
         if (x!= 0) {
-            position.x += (float) (Math.sin(Math.toRadians(rotation.y - 90)) * -1.0 * x * deltaTime);
-            position.z += (float) (Math.cos(Math.toRadians(rotation.y - 90)) * x * deltaTime);
+            position.x += (float) (Math.sin(Math.toRadians(rotation.y - 90)) * -1.0 * x);
+            position.z += (float) (Math.cos(Math.toRadians(rotation.y - 90)) * x);
         }
 
-        position.y += (float) (y * deltaTime);
+        position.y += y;
     }
 
-    public void moveRotation(float x, float y, float z, double deltaTime) {
-        this.rotation.x += (float) (x * deltaTime);
-        this.rotation.y += (float) (y * deltaTime);
-        this.rotation.z += (float) (z * deltaTime);
+    public void moveRotation(float x, float y, float z ) {
+        this.rotation.x += x;
+        this.rotation.y += y;
+        this.rotation.z += z;
     }
 
     public Vector3f getPosition() {

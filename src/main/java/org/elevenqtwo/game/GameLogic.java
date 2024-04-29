@@ -4,9 +4,9 @@ public interface GameLogic {
 
     void init();
 
-    void input(double deltaTime);
+    void input();
 
-    void update(double deltaTime);
+    void update();
 
     void render();
 

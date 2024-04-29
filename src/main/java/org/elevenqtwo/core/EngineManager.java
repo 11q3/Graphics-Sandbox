@@ -9,15 +9,19 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class EngineManager {
     public static final long NANOSECOND = 1000000000L;
-    public static float framerate = 60;
+    public static float TARGET_FRAMERATE = 6000;
     private static int fps;
-    private static final float frameTime = 1.0f / framerate;
+    private static final float frameTime = 1.0f / TARGET_FRAMERATE;
     private boolean isRunning;
 
     private WindowManager windowManager;
     private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
     private GameLogic gameLogic;
+
+    private long lastTickTime = System.nanoTime();
+    private int ticks = 0;
+    private final int maxTicks = 120;
 
     private void init()  {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
@@ -45,8 +49,6 @@ public class EngineManager {
         isRunning = false;
     }
 
-    private long lastFrameTime = System.nanoTime();
-
     private void run() {
         this.isRunning = true;
         int frames = 0;
@@ -60,11 +62,9 @@ public class EngineManager {
             long passedTime = startTime - lastTime;
             unprocessedTime += passedTime / (double) NANOSECOND;
 
-            double deltaTime = (double) startTime / lastFrameTime;
-
             frameCounter += passedTime;
 
-            input(deltaTime);
+            input();
 
             while (unprocessedTime > frameTime) {
                 render = true;
@@ -73,10 +73,18 @@ public class EngineManager {
                 if (windowManager.windowShouldClose()) {
                     stop();
                 }
+
+                // tick logic
+                long currentTime = System.nanoTime();
+                long tickTime = currentTime - lastTickTime;
+                if (tickTime >= NANOSECOND / maxTicks) {
+                    lastTickTime = currentTime;
+                    ticks++;
+                    update();
+                }
             }
 
             if (render) {
-                update(deltaTime);
                 render();
                 frames++;
             }
@@ -92,6 +100,7 @@ public class EngineManager {
         }
         cleanUp();
     }
+
     private void setFps(int fps) {
         EngineManager.fps = fps;
     }
@@ -101,12 +110,12 @@ public class EngineManager {
         windowManager.updateWindow();
     }
 
-    private void input(double deltaTime) {
-        gameLogic.input(deltaTime);
+    private void input() {
+        gameLogic.input();
     }
 
-    private void update(double deltaTime) {
-        gameLogic.update(deltaTime);
+    private void update() {
+        gameLogic.update();
     }
 
     private void cleanUp() {
@@ -119,5 +128,6 @@ public class EngineManager {
     public static int getFps() {
         return fps;
     }
-}
 
+
+}
