@@ -16,19 +16,19 @@ public class Entity {
         this.scale = scale;
     }
 
-    public void incrementRotation(float x, float y, float z) {
+    public void moveRotation(float x, float y, float z) {
         this.rotation.x += x;
         this.rotation.y += y;
         this.rotation.z += z;
     }
 
     public void movePosition(float x, float y, float z) {
-        if (z!= 0) {
+        if (z != 0) {
             position.x += (float) (Math.sin(Math.toRadians(rotation.y)) * -1.0 * z);
             position.z += (float) (Math.cos(Math.toRadians(rotation.y)) * z);
         }
 
-        if (x!= 0) {
+        if (x != 0) {
             position.x += (float) (Math.sin(Math.toRadians(rotation.y - 90)) * -1.0 * x);
             position.z += (float) (Math.cos(Math.toRadians(rotation.y - 90)) * x);
         }
@@ -50,13 +50,5 @@ public class Entity {
 
     public float getScale() {
         return scale;
-    }
-
-    public void setPosition(Vector3f position) {
-        this.position = position;
-    }
-
-    public void setRotation(Vector3f rotation) {
-        this.rotation = rotation;
     }
 }

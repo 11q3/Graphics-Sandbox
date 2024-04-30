@@ -8,10 +8,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class EngineManager {
-    public static final long NANOSECOND = 1000000000L;
-    public static float TARGET_FRAMERATE = 6000;
-    private static int fps;
-    private static final float frameTime = 1.0f / TARGET_FRAMERATE;
+    private static int FPS;
     private boolean isRunning;
 
     private WindowManager windowManager;
@@ -20,10 +17,9 @@ public class EngineManager {
     private GameLogic gameLogic;
 
     private long lastTickTime = System.nanoTime();
-    private int ticks = 0;
-    private final int maxTicks = 120;
+    private static final int MAX_TICKS = 120;
 
-    private void init()  {
+    private void init() {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
 
         windowManager = Launcher.getWindowManager();
@@ -34,7 +30,7 @@ public class EngineManager {
         mouseInput.init();
     }
 
-    public void startEngine() throws Exception {
+    public void startEngine() {
         init();
         if (isRunning) {
             return;
@@ -60,26 +56,29 @@ public class EngineManager {
             boolean render = false;
             long startTime = System.nanoTime();
             long passedTime = startTime - lastTime;
-            unprocessedTime += passedTime / (double) NANOSECOND;
-
+            unprocessedTime += passedTime / (double) Constants.NANOSECOND;
             frameCounter += passedTime;
+
+            if (frameCounter >= Constants.NANOSECOND) {
+                setFps(frames);
+                windowManager.setTitle(Constants.TITLE + " " + getFPS());
+                frames = 0;
+                frameCounter = 0;
+            }
 
             input();
 
-            while (unprocessedTime > frameTime) {
+            while (unprocessedTime > Constants.FRAMETIME) {
                 render = true;
-                unprocessedTime -= frameTime;
+                unprocessedTime -= Constants.FRAMETIME;
 
-                if (windowManager.windowShouldClose()) {
-                    stop();
-                }
+                if (windowManager.windowShouldClose()) stop();
 
-                // tick logic
                 long currentTime = System.nanoTime();
                 long tickTime = currentTime - lastTickTime;
-                if (tickTime >= NANOSECOND / maxTicks) {
+
+                if (tickTime >= Constants.NANOSECOND / MAX_TICKS) {
                     lastTickTime = currentTime;
-                    ticks++;
                     update();
                 }
             }
@@ -91,18 +90,13 @@ public class EngineManager {
 
             lastTime = startTime;
 
-            if (frameCounter >= NANOSECOND) {
-                setFps(frames);
-                windowManager.setTitle(Constants.TITLE + " " + getFps());
-                frames = 0;
-                frameCounter = 0;
-            }
+
         }
         cleanUp();
     }
 
     private void setFps(int fps) {
-        EngineManager.fps = fps;
+        EngineManager.FPS = fps;
     }
 
     private void render() {
@@ -125,9 +119,7 @@ public class EngineManager {
         GLFW.glfwTerminate();
     }
 
-    public static int getFps() {
-        return fps;
+    public static int getFPS() {
+        return FPS;
     }
-
-
 }

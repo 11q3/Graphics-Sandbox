@@ -1,6 +1,5 @@
 package org.elevenqtwo.game;
 
-import org.elevenqtwo.core.EngineManager;
 import org.elevenqtwo.core.RenderManager;
 import org.elevenqtwo.core.WindowManager;
 import org.elevenqtwo.graphics.Entity;
@@ -45,7 +44,7 @@ public class TestGame implements GameLogic {
             Model model = objectLoader.loadModel(vertices, textureCoordinates, indices);
             model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")));
 
-            entity = new Entity(model, new Vector3f(0, 0, -0), new Vector3f(0, 0, 0), 1);
+            entity = new Entity(model, new Vector3f(5, 0, 0), new Vector3f(0, 0, 0), 5);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +59,8 @@ public class TestGame implements GameLogic {
         double mouseX = mouseInput.getDX();
         double mouseY = mouseInput.getDY();
 
-        camera.moveRotation((float) (mouseX * Constants.CAMERA_SENSITIVITY),
+        camera.moveRotation(
+                (float) (mouseX * Constants.CAMERA_SENSITIVITY),
                 (float) (mouseY * Constants.CAMERA_SENSITIVITY),
                 0);
 
@@ -86,6 +86,8 @@ public class TestGame implements GameLogic {
         camera.movePosition(cameraIncrement.x * Constants.CAMERA_SPEED,
                 cameraIncrement.y * Constants.CAMERA_SPEED,
                 cameraIncrement.z * Constants.CAMERA_SPEED);
+
+        entity.moveRotation(0,0,0);
     }
 
     @Override
@@ -201,17 +203,5 @@ public class TestGame implements GameLogic {
                 20, 21, 23,
                 23, 21, 22,
         };
-    }
-
-    private void adjustCameraSpeedForFps() {
-        // Предполагаем, что TARGET_FRAMERATE равно 60
-        float targetFramerate = 60;
-        float actualFramerate = EngineManager.getFps();
-
-        // Вычисляем коэффициент замедления
-        float slowdownFactor = targetFramerate / actualFramerate;
-
-        // Применяем коэффициент замедления к скорости движения камеры
-        cameraIncrement.mul(slowdownFactor);
     }
 }

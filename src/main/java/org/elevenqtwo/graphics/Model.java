@@ -5,7 +5,6 @@ public class Model {
     private final int vertexCount;
     private Texture texture;
 
-
     public Model(int id, int vertexCount, Texture texture) {
         this.id = id;
         this.vertexCount = vertexCount;

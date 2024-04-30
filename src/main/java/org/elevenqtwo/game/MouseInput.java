@@ -1,13 +1,8 @@
 package org.elevenqtwo.game;
 
 import org.elevenqtwo.core.WindowManager;
-import org.joml.Vector2d;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 import org.elevenqtwo.util.Constants;
 
-import javax.security.auth.callback.LanguageCallback;
 
 public class MouseInput {
     private final WindowManager windowManager;

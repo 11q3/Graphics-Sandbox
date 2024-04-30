@@ -3,7 +3,6 @@ package org.elevenqtwo.core;
 import org.elevenqtwo.game.Camera;
 import org.elevenqtwo.game.Launcher;
 import org.elevenqtwo.graphics.Entity;
-import org.elevenqtwo.graphics.Model;
 import org.elevenqtwo.util.ResourceLoader;
 import org.elevenqtwo.util.Transformation;
 import org.lwjgl.opengl.GL11;

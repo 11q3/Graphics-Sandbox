@@ -13,12 +13,12 @@ public class Camera {
     }
 
     public void movePosition(float x, float y, float z) {
-        if (z!= 0) {
+        if (z != 0) {
             position.x += (float) (Math.sin(Math.toRadians(rotation.y)) * -1.0 * z);
             position.z += (float) (Math.cos(Math.toRadians(rotation.y)) * z);
         }
 
-        if (x!= 0) {
+        if (x != 0) {
             position.x += (float) (Math.sin(Math.toRadians(rotation.y - 90)) * -1.0 * x);
             position.z += (float) (Math.cos(Math.toRadians(rotation.y - 90)) * x);
         }
@@ -26,7 +26,7 @@ public class Camera {
         position.y += y;
     }
 
-    public void moveRotation(float x, float y, float z ) {
+    public void moveRotation(float x, float y, float z) {
         this.rotation.x += x;
         this.rotation.y += y;
         this.rotation.z += z;
