@@ -4,12 +4,14 @@ import org.elevenqtwo.core.EngineManager;
 import org.elevenqtwo.core.WindowManager;
 import org.elevenqtwo.util.Constants;
 
+import java.io.IOException;
+
 public class Launcher {
 
     public static WindowManager windowManager;
     private static TestGame game;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         windowManager = new WindowManager(Constants.TITLE, 1600, 1600, false);
         game = new TestGame();
@@ -18,6 +20,7 @@ public class Launcher {
             engineManager.startEngine();
         } catch (Exception e) {
             System.err.println("Unable to launch engine: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

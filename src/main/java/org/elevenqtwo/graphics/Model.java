@@ -32,4 +32,9 @@ public class Model {
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
 }

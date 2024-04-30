@@ -51,4 +51,5 @@ public class Entity {
     public float getScale() {
         return scale;
     }
+
 }
