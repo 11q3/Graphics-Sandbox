@@ -36,12 +36,13 @@ public class TestGame implements GameLogic {
 
     @Override
     public void init() {
+        objectLoader.loadOBJModel("")
         try {
             GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 
             renderManager.init();
-            Model model = objectLoader.loadModel("src/main/resources/models/floppacube/floppacube/FloppaCube.obj",
-                    "src/main/resources/models/floppacube/floppacube/FloppaCube.mtl");
+            Model model = objectLoader.loadOBJModel("src/main/resources/models/floppacube/FloppaCube.obj",
+                    "src/main/resources/models/floppacube/FloppaCube.mtl");
 
             GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
             GL30.glBindVertexArray(0);
