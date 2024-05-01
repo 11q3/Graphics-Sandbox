@@ -21,8 +21,8 @@ public class RenderManager {
 
     public void init() throws Exception {
         shaderManager = new ShaderManager();
-        shaderManager.createVertexShader(ResourceLoader.loadResource("/shaders/vertex.vs"));
-        shaderManager.createFragmentShader(ResourceLoader.loadResource("/shaders/fragment.fs"));
+        shaderManager.createVertexShader(ResourceLoader.loadResource("/shaders/vertex.vert"));
+        shaderManager.createFragmentShader(ResourceLoader.loadResource("/shaders/fragment.frag"));
         shaderManager.link();
         shaderManager.createUniform("textureSampler");
         shaderManager.createUniform("transformationMatrix");
