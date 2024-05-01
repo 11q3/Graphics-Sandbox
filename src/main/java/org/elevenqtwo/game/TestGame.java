@@ -11,8 +11,12 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class TestGame implements GameLogic {
 
@@ -36,19 +40,24 @@ public class TestGame implements GameLogic {
 
     @Override
     public void init() {
-        objectLoader.loadOBJModel("")
         try {
-            GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-
             renderManager.init();
-            Model model = objectLoader.loadOBJModel("src/main/resources/models/floppacube/FloppaCube.obj",
-                    "src/main/resources/models/floppacube/FloppaCube.mtl");
+            //GLFW.glfwSetInputMode(Launcher.windowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 
-            GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-            GL30.glBindVertexArray(0);
+            //Model model = objectLoader.loadOBJModel("src/main/resources/models/Residental Building/Residential Buildings 001.obj");
+            Model model = objectLoader.loadOBJModel("src/main/resources/models/Residental Building/name.obj");
+            //Model model = objectLoader.loadOBJModel("src/main/resources/models/Residental Building/bunny.obj");
+            //Model model = objectLoader.loadOBJModel("src/main/resources/models/floppacube/FloppaCube.obj");
 
 
-            entity = new Entity(model, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), 5);
+
+            model.setTexture(new Texture(objectLoader.loadTexture("src/main/resources/textures/img.png")), 1);
+
+
+
+            //GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+
+            entity = new Entity(model, new Vector3f(0, -10, -5), new Vector3f(0, 100, 0), 100);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -95,11 +104,6 @@ public class TestGame implements GameLogic {
 
     @Override
     public void render() {
-        if (windowManager.isResize()) {
-            GL11.glViewport(0, 0, windowManager.getWidth(), windowManager.getHeight());
-            windowManager.setResize(false);
-        }
-
         windowManager.setClearColor(256.0f, 256.0f, 256.0f, 0.0f);
         renderManager.render(entity, camera);
     }

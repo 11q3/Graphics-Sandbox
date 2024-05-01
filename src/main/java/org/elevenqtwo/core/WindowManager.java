@@ -67,7 +67,6 @@ public class WindowManager {
         });
 
         GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-        assert vidMode != null;
         GLFW.glfwSetWindowPos(window, (vidMode.width() - width) / 2,
                 (vidMode.height() - height) / 2);
 
@@ -86,6 +85,8 @@ public class WindowManager {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
     }
 
     public void updateWindow() {
